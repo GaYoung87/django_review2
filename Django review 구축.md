@@ -1,7 +1,6 @@
 # Django crud 구축하기
 
 <hr/>
-
 ##  1. 가상 환경 생성 및 적용
 
 ```bash
@@ -306,10 +305,22 @@ TEMPLATES = [
 
 <br/>
 
-## 10. veiw.py
+## 10. forms.py
 
-```
+```python
+# articels/forms.py
+from django import forms
+from .models import Article # 어느 모델의 form인지 정의할 수 있음.
 
+
+# model form 작성하기
+class ArticleForm(forms.ModelForm):
+
+    class Meta:  # 따로 상속받을 필요없음.
+        model = Article
+        # fields = ['title', 'content', ]  # 데이터필드 하나하나 입력 
+                                           # content가 빠지면?
+        fields = '__all__'  # 모든 필드를 다 가지고오겠다.
 ```
 
 
@@ -317,3 +328,27 @@ TEMPLATES = [
 <br/>
 
 ## 9. 기본 html 템플릿(base.html) 만들기
+
+
+
+
+
+
+
+
+
+
+
+### updete
+
+```python
+# views.py (1차)
+def update(request, article_pk):
+    if request.method == 'POST':
+        pass
+    else:  # GET method
+        return render(request, 'articles/update.html', context)
+```
+
+
+

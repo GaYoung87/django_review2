@@ -4,9 +4,13 @@ from django.db import models
 
 class Article(models.Model):  # model명은 단수로! app 이름은 보통 복수로!
     title = models.CharField(max_length=20)  # max_length: 필수적으로 들어가야함!
-    content = models.TextField  # TextField로 하는 이유: 내용이 길 수 있어서
+    content = models.TextField()  # TextField로 하는 이유: 내용이 길 수 있어서
     created_at = models.DateTimeField(auto_now_add=True)  # 날짜와 시간 동시저장
     updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:  # 데이터를 위한 데이터
+        ordering = ('-pk', )  # tuple로 인식하도록 ,를 붙인다
+        # 새로 만든 애들이 위쪽으로 쌓일 수 있도록
 
 # 모델링 했다고 장고에게 알려주러 간다.
 # $ python manage.py makemigrations -> 알려줌(실제 db에 반영시키지 않음)
