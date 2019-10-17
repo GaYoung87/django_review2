@@ -40,6 +40,8 @@ post: 조건달고 보내는 것(ex. 암호 -> csrf_token사용, 그래서 주�
 
 
 
+{% comment %}
+
 [선생님 코드]
 
 <form action="{% url 'articles:comment_create' article.pk %}" method="POST">
@@ -58,4 +60,5 @@ post: 조건달고 보내는 것(ex. 암호 -> csrf_token사용, 그래서 주�
     </form>
   </li>
 {% endfor %}
-</ul>
+</ul> 
+{% endcomment %}
