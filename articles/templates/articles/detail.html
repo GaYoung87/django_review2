@@ -9,10 +9,30 @@
 <hr>
 <p>{{ article.content }}</p>
 <hr>
+{% comment %} a: get요청(주소창에 쓰는 것)
+post: 조건달고 보내는 것(ex. 암호 -> csrf_token사용, 그래서 주소창에 쓸수없음) {% endcomment %}
 <a href="{% url 'articles:update' article.pk %}">[수정하기]</a>
+{% comment %} 보통 POST하면 보통 form테그로 보냄 {% endcomment %}
 <form action="{% url 'articles:delete' article.pk %}" method="POST">
 {% comment %} 우리는 POST method 사용할 것이므로 method="POST" 작성해야함 {% endcomment %}
   {% csrf_token %}
   <button type="submit">[삭제하기]</button>
 </form>
+<hr>
+
+<h3>Comment</h3>
+<form action="{% url 'articles:comment_create' article.pk %}" method="POST">
+  {% csrf_token %}
+  <input type="text" name="content">
+  <button type="submit">[댓글 작성하기]</button>
+</form>
+{% for comment in comments %}
+<li>{{ comment.content }}
+<a href="{% url 'articles:comment_delete' article.pk comment.pk %}">[댓글 삭제하기]</a>
+</li>
+
+{% empty %}
+<p>아직 댓글이 없습니다.</p>
+{% endfor %}
+
 {% endblock container %}

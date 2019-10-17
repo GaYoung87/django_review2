@@ -352,3 +352,8 @@ def update(request, article_pk):
 
 
 
+```
+$ python manage.py dumpdata --format=yaml articles.article > articles.yaml
+어떤 타입으로 데이터를 꺼내 올것인지, 어떤 파일명으로 할 것인지
+```
+

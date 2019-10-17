@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.validators import EmailValidator, MinValueValidator
 
 # Create your models here.
 
@@ -22,3 +23,24 @@ class Article(models.Model):  # model명은 단수로! app 이름은 보통 복�
 # 1
 # ''  #실제 db에 반영된 것은 아님
 # $ python manage.py migrate  -> 반영
+
+
+class Person(models.Model):
+    name = models.CharField(max_length=10)
+    email = models.CharField(
+        max_length=100,
+        validators=[EmailValidator(message='이메일 형식에 맞지 않습니다.')]
+    )
+    age = models.IntegerField(
+        validators=[MinValueValidator(19, message='미성년자는 노노')]
+    )
+
+
+class Comment(models.Model):
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    article = models.ForeignKey(Article, on_delete=models.CASCADE, related_name='comments')
+            # on_delete 설정 : 참조한 키가 삭제되면 그 키와 관련된 데이터를 같이 삭제해주세요
+    class Meta:  # 데이터를 위한 데이터
+        ordering = ('-pk', )  # 1. tuple로 인식하도록 ,를 붙인다
+                              # 2. 새로 만든 애들이 위쪽으로 쌓일 수 있도록

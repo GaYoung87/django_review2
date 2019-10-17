@@ -5,6 +5,8 @@
 {% comment %} Get/articles/create/ {% endcomment %}
 {% comment %} POST/articles/create/ 
         -> GET과 POST 뒤에 url이 같으면 action은 ''이어도 괜찮{% endcomment %}
+
+
 {% block container %}
 <form method="POST" action="{% url 'articles:create' %}">
   {% csrf_token %}

@@ -5,10 +5,12 @@ from . import views  # 현재 app에서 view를 가지고오겠다 -> .=현재 �
 app_name = 'articles'
 
 urlpatterns = [
+    # index:현재 있는 모든 아티클들을 보여줌
     path('', views.index, name='index'),
-    path('create/', views.create, name='create'),
-        # 여러 앱에서 create라는 함수가 있을 수 있는데, 이름을 지정하면 이름이 나올 때 가라!
+    path('create/', views.create, name='create'),  # 여러 앱에서 create라는 함수가 있을 수 있는데, 이름을 지정하면 이름이 나올 때 가라!
     path('<int:article_pk>/', views.detail, name='detail'),
     path('<int:article_pk>/update/', views.update, name='update'),
-    path('<int:article_pk>/delete/', views.delete, name='delete')
+    path('<int:article_pk>/delete/', views.delete, name='delete'),
+    path('<int:article_pk>/comment/', views.comment_create, name='comment_create'),
+    path('<int:article_pk>/comment/<int:comment_pk>/delete/', views.comment_delete, name='comment_delete')
 ]
