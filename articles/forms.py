@@ -14,4 +14,5 @@ class CommentForm(forms.ModelForm):
     class Meta:  # 따로 상속받을 필요없음.
         model = Comment
         fields = '__all__'  # 모든 필드를 다 가지고오겠다.
-
+        # fields = ['content'] -> content 필드만 가지고오겠다.
+        # 선생님코드 fields = '__all__' -> exclude = ['article', ]

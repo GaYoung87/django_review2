@@ -13,4 +13,8 @@ urlpatterns = [
     path('<int:article_pk>/delete/', views.delete, name='delete'),
     path('<int:article_pk>/comment/', views.comment_create, name='comment_create'),
     path('<int:article_pk>/comment/<int:comment_pk>/delete/', views.comment_delete, name='comment_delete')
+    # 선생님 코드
+    # path('<int:article_pk>/comments/', views.comment_create, name='comment_create'),  article_pk번째 article에 comments를 생성하겠다.
+    # 삭제 시에는 article_pk가 필요없을 수도 있지만, 상속성을 나타내기 위해서
+    # path('<int:article_pk>/comment/<int:comment_pk>/delete/', views.comment_delete, name='comment_delete'),
 ]

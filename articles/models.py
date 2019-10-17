@@ -39,7 +39,7 @@ class Person(models.Model):
 class Comment(models.Model):
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
-    article = models.ForeignKey(Article, on_delete=models.CASCADE, related_name='comments')
+    article = models.ForeignKey(Article, on_delete=models.CASCADE, related_name='comments')  # 몇번째 article에 대한 comment인지 확인하기위해 필수! -> 1:N의 관계!!
             # on_delete 설정 : 참조한 키가 삭제되면 그 키와 관련된 데이터를 같이 삭제해주세요
     class Meta:  # 데이터를 위한 데이터
         ordering = ('-pk', )  # 1. tuple로 인식하도록 ,를 붙인다

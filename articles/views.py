@@ -118,7 +118,7 @@ def comment_create(request, article_pk):
     article = get_object_or_404(Article, pk=article_pk)
     if request.method == 'POST':
         # 어떤 내용을 작성했는지, detail에서 input의 이름이 content였기때무에, request.POST.get으로 content항목을 받아온다.
-        content = request.POST.get('content')
+        content = request.POST.get('content')  # 사용자가 넘겨준 데이터
         # comment라는 모델에 속하는 comment를 만들자.
         # Comment(article=article) -> 모델에 있는 변수=지정한 aritcle이다.
         comment = Comment(article=article)
@@ -130,6 +130,7 @@ def comment_create(request, article_pk):
         return redirect('articles:detail', article_pk)
 
 
+
 @require_POST
 def comment_delete(request, article_pk, comment_pk):
     # article = get_object_or_404(Article, pk=article_pk) 쓸 필요가 없다!
@@ -139,3 +140,33 @@ def comment_delete(request, article_pk, comment_pk):
     comment = get_object_or_404(Comment, pk=comment_pk)
     comment.delete()
     return redirect('articles:detail', article_pk)
+
+
+
+# # 선생님 코드 -> form 사용
+# def detail(request, article_pk):
+#     article = get_object_or_404(Article, pk=article_pk)
+#     comment_form = CommentForm()
+#     comments = Comment.objects.all()
+#     context = {
+#         'article': article, 
+#         'comment_form': comment_form, 
+#         'comments': comments
+#     }
+#     return render(request, 'articles/detail.html', context)
+
+
+# @require_POST
+# def comment_create(request, article_pk):
+#     form = CommentForm(request.POST)  # 사용자가 넘겨준 데이터
+#     if form.is_valid():
+#         comment = form.save(commit=False)
+#         comment.article_id = article_pk
+#         form.save()
+#     return redirect('article:detail', article_pk)
+
+
+# def comment_delete(request, article_pk, comment_pk):
+#     comment = get_object_or_404(Comment, pk=comment_pk)
+#     comment.delete()
+#     return redirect('article:detail', article_pk)

@@ -20,6 +20,7 @@ post: 조건달고 보내는 것(ex. 암호 -> csrf_token사용, 그래서 주�
 </form>
 <hr>
 
+
 <h3>Comment</h3>
 <form action="{% url 'articles:comment_create' article.pk %}" method="POST">
   {% csrf_token %}
@@ -36,3 +37,25 @@ post: 조건달고 보내는 것(ex. 암호 -> csrf_token사용, 그래서 주�
 {% endfor %}
 
 {% endblock container %}
+
+
+
+[선생님 코드]
+
+<form action="{% url 'articles:comment_create' article.pk %}" method="POST">
+  {% csrf_token %}
+  {{ comment_form.as_table }}
+  <button type="submit">[작성하기]</button>
+</form> 
+<hr>
+<ul>
+{% for comment in comments %}
+  <li>
+    <form action="{% url 'article:comment_delete' article.pk %}" method="POST">
+    {% csrf_token %}
+    <span>{{ comment.content }} - {{ comment.created_at }}</span>
+    <button type="submit">[삭제하기]</button>
+    </form>
+  </li>
+{% endfor %}
+</ul>
