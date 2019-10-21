@@ -18,6 +18,7 @@ from django.urls import path, include
 
 # 사용자가 들어오는 경로를 계속 연결
 urlpatterns = [
+    path('accounts/', include('accounts.urls')),
     path('articles/', include('articles.urls')),
                 # urls.py끼리 mapping(urls를 다른 곳으로 넘겨주는 것)
     path('admin/', admin.site.urls),

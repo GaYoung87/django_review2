@@ -33,13 +33,15 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     # Local apps
     'articles',
+    'accounts', # django 내에서 로그인 관련, 인증 관련 app을 가지고와서 사용하기!
+                # $ python manage.py startapp accounts
 
     # Third party apps
     'django_extensions',
 
     # Django가 이미 가지고있는 application
     'django.contrib.admin',
-    'django.contrib.auth',
+    'django.contrib.auth',  # 인증관리
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',

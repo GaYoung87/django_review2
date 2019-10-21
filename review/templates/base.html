@@ -13,6 +13,12 @@
 <body>
   <header>
     <h1>저희 페이지에 오신 것을 환영합니다~</h1>
+    {% comment %} user: template가 기본적으로 가지고있는 정보라 사용가능! {% endcomment %}
+    <p>
+      {% comment %} span : 의미를 부여하는 테그 {% endcomment %}
+      <span>Hello, {{ user.username }}</span>
+      <a href="{% url 'accounts:logout' %}">[로그아웃]</a>
+    </p>
     <a href="{% url 'articles:index' %}">[목록]</a>
     {% comment %} app_name: 경로이름(urls.py의 name) {% endcomment %}
     <hr>
