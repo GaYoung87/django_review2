@@ -9,4 +9,6 @@ urlpatterns = [
     # 로그인 url
     path('login/', views.login, name='login'),
     path('logout/', views.logout, name='logout'),
+    # 회원탈퇴
+    path('delete/', views.delete, name='delete'),
 ]
