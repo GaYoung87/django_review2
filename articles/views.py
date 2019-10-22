@@ -216,3 +216,15 @@ def comment_delete(request, article_pk, comment_pk):
 #     comment = get_object_or_404(Comment, pk=comment_pk)
 #     comment.delete()
 #     return redirect('article:detail', article_pk)
+
+
+def like(request, article_pk):
+    user = request.user
+    article = get_object_or_404(Article, pk=article_pk)  # 필요한 정보 준비 완료
+
+    if article.liked_users.filter(pk=user.pk).exists():  # 좋아요 목록에 있었으면 제거
+        # user입장에서 user가 좋아요 누른 article중에서 넘겨받은 article 추가하겠다.
+        user.liked_articles.remove(article)
+    else:  # 좋아요 목록에 없었으면 추가
+        user.liked_articles.add(article)
+    return redirect('articles:detail', article_pk)

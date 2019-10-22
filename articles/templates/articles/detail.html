@@ -8,6 +8,16 @@
 <p>{{ article.created_at }}</p>
 <p>작성자: {{ article.user }}</p>
 <hr>
+{% comment %} 하트를 누르면 좋아요가 눌림 -> 하트가 버튼취급 {% endcomment %}
+<a href="{% url 'articles:like' article.pk %}">
+  {% if user in article.liked_users.all %}
+    <i class="fas fa-heart fa-lg" style="color: red"></i>
+  {% else %}
+  <i class="far fa-heart fa-lg" style="color: red"></i>
+  {% endif %}
+</a>
+<span>{{ article.liked_users.all | length }}명이 이 글을 좋아합니다. </span>
+
 <p>{{ article.content }}</p>
 {% comment %} a: get요청(주소창에 쓰는 것)
 post: 조건달고 보내는 것(ex. 암호 -> csrf_token사용, 그래서 주소창에 쓸수없음) {% endcomment %}

@@ -4,6 +4,8 @@ from django.conf import settings
 
 
 
+# article.liked_users.all() -> 게시글을 좋아요 누른 사람들
+# user.liked_articles.all() -> 내가 좋아요 누른 게시글들...
 class Article(models.Model):  # model명은 단수로! app 이름은 보통 복수로!
     title = models.CharField(max_length=20)  # max_length: 필수적으로 들어가야함!
     content = models.TextField()  # TextField로 하는 이유: 내용이 길 수 있어서
@@ -13,10 +15,8 @@ class Article(models.Model):  # model명은 단수로! app 이름은 보통 복�
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)  # 한명의 유저가 여러개 article생성하는데, 회원탈퇴하면 article을 삭제할 것이다 -> on_delete=models.CASCADE
     # models.py에서는 user model 쓸 때, settings로부터 직접 가지고온다 -> get_user_model()사용하지 않음
     # on_delete=models.CASCADE: 연결되어있는 관계가 끊어지면, 해당 article도 삭제
-    
-    # user입장에서 article 가지고오는 방법
-
-
+    liked_users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='liked_articles')
+                            # article.liked_users.all()  //  related_name -> user.liked_articles.all() 가능 
     class Meta:  # 데이터를 위한 데이터
         ordering = ('-pk', )  # tuple로 인식하도록 ,를 붙인다
         # 새로 만든 애들이 위쪽으로 쌓일 수 있도록
