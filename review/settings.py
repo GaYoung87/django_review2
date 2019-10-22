@@ -132,7 +132,7 @@ USE_TZ = True
 
 # homeworkshop
 STATIC_URL = '/static/'
-STATCIEFILES_DIRS = [os.path.join(BASE_DIR, 'assets'), os.path.join(BASE_DIR, 'statice')]
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'assets'), os.path.join(BASE_DIR, 'statice')]
 
 # MEDIA_ROOT = os.path.join(BASE_DIR, 'uploaded_files')
 # # django.com/media/사용자가 업로드한 파일 경로

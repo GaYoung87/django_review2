@@ -40,3 +40,9 @@ name             lecture                             title       		student_name
 
 김정								html
 
+
+
+
+
+다른 사람이 작성한 글은 수정하기 버튼 보이지 않게
+
