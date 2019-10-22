@@ -18,15 +18,17 @@
 <body>
   <header>
     <h1>저희 페이지에 오신 것을 환영합니다~</h1>
+    {% comment %} 사용자가 login되어있을때만 보여주는 것들 {% endcomment %}
     {% if user.is_authenticated %}
     {% comment %} user: template가 기본적으로 가지고있는 정보라 사용가능! {% endcomment %}
     <p>
       {% comment %} span : 의미를 부여하는 테그 {% endcomment %}
       <span>Hello, {{ user.username }}</span>
       <a href="{% url 'accounts:logout' %}">[로그아웃]</a>
+      <a href="{% url 'accounts:update' %}">[회원정보 수정]</a>
       <form action="{% url 'accounts:delete' %}" method="post">
         {% csrf_token %}
-        <button type="submit">[회원 탈퇴]]</button>
+        <button type="submit">[회원 탈퇴]</button>
       </form>
     </p>
 
