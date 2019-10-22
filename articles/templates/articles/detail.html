@@ -6,12 +6,12 @@
 
 <h2>{{ article.title }}</h2>
 <p>{{ article.created_at }}</p>
+<p>작성자: {{ article.user }}</p>
 <hr>
 <p>{{ article.content }}</p>
-<hr>
 {% comment %} a: get요청(주소창에 쓰는 것)
 post: 조건달고 보내는 것(ex. 암호 -> csrf_token사용, 그래서 주소창에 쓸수없음) {% endcomment %}
-{% if user.is_authenticated %}
+{% if article.user == request.user %}
   <a href="{% url 'articles:update' article.pk %}">[수정하기]</a>
   {% comment %} 보통 POST하면 보통 form테그로 보냄 {% endcomment %}
   <form action="{% url 'articles:delete' article.pk %}" method="POST">
@@ -39,14 +39,14 @@ post: 조건달고 보내는 것(ex. 암호 -> csrf_token사용, 그래서 주�
 
 {% for comment in comments %}
   <li>
-    {% if user.is_authenticated %}
+    {% if comment.user == request.user %}
     <form action="{% url 'articles:comment_delete' article.pk comment.pk %}" method="POST">
     {% csrf_token %}
-    <span>{{ comment.content }} = {{ comment.created_at }}</span>
-    <button type="submit">[삭제하기]</button>
+    <span>{{ comment.content }} = {{ comment.created_at }} / {{ comment.user }}</span>
+    <button class="btn btn-danger" type="submit">[삭제하기]</button>
     </form>
     {% else %}
-    <span>{{ comment.content }} = {{ comment.created_at }}</span>
+    <span>{{ comment.content }} = {{ comment.created_at }} / {{ comment.user }}</span>
     {% endif %}
     {% comment %} <a href="{% url 'articles:comment_delete' article.pk comment.pk %}">[댓글 삭제하기]</a></form> {% endcomment %}
   </li>
@@ -57,7 +57,6 @@ post: 조건달고 보내는 것(ex. 암호 -> csrf_token사용, 그래서 주�
 {% endfor %}
 
 {% endblock container %}
-
 
 
 {% comment %}

@@ -7,7 +7,7 @@ class ArticleForm(forms.ModelForm):
 
     class Meta:  # 따로 상속받을 필요없음.
         model = Article
-        fields = '__all__'  # 모든 필드를 다 가지고오겠다.
+        fields = ['title', 'content', ]  # 모든 필드를 다 가지고오겠다.
 
 class CommentForm(forms.ModelForm):
 

@@ -60,13 +60,17 @@ def create(request):
         # Article을 생성해달라고 하는 요청
         # 데이터 거내서 Article 생성
         # 실제적으로 데이터를 생성.
-        form = ArticleForm(request.POST)  # 사용자의 데이터를 가지고오겠다.
+        form = ArticleForm(request.POST)  # 사용자의 데이터를 가지고오겠다.  # title, content
         # embed()  # 잠시 코드멈춰서 shell에 들어갔다가 나오면 다시 코드 진행
                  # 데이터까지 적혀있는 것을 보여줌 
         if form.is_valid():  # 유효하지 않으면 else문가서 context에 가서 다시 rendering
-            form.save()  # 데이터는 저장하는 것
-            return redirect('articles:index')  # 여기서는 index에서 보여준느게 아니라 새로고침.
+            article = form.save(commit=False)  # 데이터는 저장하는 것  # 바로 db에 저장하지는 않겠다.(commit=False)
+            article.user = request.user  # 지금 로그인되어있는 정보를 생성할 article의 user정보로 넣겠다.
+            article.save()
+            return redirect('articles:detail', article.pk)  # 여기서는 index에서 보여준느게 아니라 새로고침.
                             # 그러고나서, index에 들어가서 index가 보여주는 것!
+                            # article.pk: article에서 pk를 꺼낸다
+                            # article_pk: url에서에서 사용해서 넘겨지는 pk
     else:
         # GET 요청
         # Article을 생성하기 위한 페이지를 달라고 하는 요청
@@ -103,15 +107,19 @@ def create(request):
 def update(request, article_pk):
     article = get_object_or_404(Article, pk=article_pk)
     # post의 목적: 기존의 아티클을 수정한 값을 바꾸줌 
-    if request.method == 'POST':
-        # form에 request.POST로 들어온 애는 수정할 값
-        form = ArticleForm(request.POST, instance=article)  # 기존에 존재하는 data에 추가
-        if form.is_valid():
-            form.save()
-            return redirect('articles:detail', article_pk)
-    else:  # GET method
-        # 이때 form은 기존 처음에 작성되었던 값
-        form = ArticleForm(instance=article)  # 특정 데이터를 넣은 채로 form을 보이겠다.
+
+    if article.user == request.user:  # 접속user와 작성user이 같으면
+        if request.method == 'POST':
+            # form에 request.POST로 들어온 애는 수정할 값
+            form = ArticleForm(request.POST, instance=article)  # 기존에 존재하는 data에 추가
+            if form.is_valid():
+                form.save()
+                return redirect('articles:detail', article_pk)
+        else:  # GET method
+            # 이때 form은 기존 처음에 작성되었던 값
+            form = ArticleForm(instance=article)  # 특정 데이터를 넣은 채로 form을 보이겠다.
+    else:
+        return redirect('articles:detail', article_pk)
     context = {'form': form, 'article_pk': article_pk}
     return render(request, 'articles/update.html', context)
     # get : update를 이제 할 것이다 -> update페이지 여기있어
@@ -127,7 +135,10 @@ def delete(request, article_pk):
     # article_pk에 맞는 article을 꺼낸다.
     # 삭제한다. (POST, form 사용이유: 우리가 제공하는 방법으로만 삭제하게 만들기 위해!)
         article = get_object_or_404(Article, pk=article_pk)
-        article.delete()
+        if article.user == request.user:
+            article.delete()
+        else:
+            return redirect('articles:detail', article_pk)
     return redirect('articles:index')  # redirect는 get요청만 받는다.
 
 
@@ -138,6 +149,7 @@ def comment_create(request, article_pk):
         if form.is_valid():
             comment = form.save(commit=False)
             comment.article_id = article_pk
+            comment.user = request.user
             comment.save()
     return redirect('articles:detail', article_pk)
 
@@ -169,7 +181,8 @@ def comment_delete(request, article_pk, comment_pk):
     #      detail페이지에 리턴할 때만 필요하므로 그 article_pk를 바로 redirect()안에 넣어줌!
     # 대신 article_pk = comment.article_id넣어줘도 괜찮. -> db보면 article_id있음
         comment = get_object_or_404(Comment, pk=comment_pk)
-        comment.delete()
+        if comment.user == request.user:
+            comment.delete()
         return redirect('articles:detail', article_pk)
     else:  # else문 필요없음. 
         return HttpResponse('You are Unauthorized', status=401)
