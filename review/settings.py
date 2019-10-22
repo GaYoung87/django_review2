@@ -35,7 +35,8 @@ INSTALLED_APPS = [
     'articles',
     'accounts', # django 내에서 로그인 관련, 인증 관련 app을 가지고와서 사용하기!
                 # $ python manage.py startapp accounts
-
+    'manytoone',
+    
     # Third party apps
     'django_extensions',
 
