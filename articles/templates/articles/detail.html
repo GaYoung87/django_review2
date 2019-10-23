@@ -47,6 +47,7 @@ post: 조건달고 보내는 것(ex. 암호 -> csrf_token사용, 그래서 주�
 </form>
 {% endif %}
 
+<ul>
 {% for comment in comments %}
   <li>
     {% if comment.user == request.user %}
@@ -60,11 +61,10 @@ post: 조건달고 보내는 것(ex. 암호 -> csrf_token사용, 그래서 주�
     {% endif %}
     {% comment %} <a href="{% url 'articles:comment_delete' article.pk comment.pk %}">[댓글 삭제하기]</a></form> {% endcomment %}
   </li>
-  
-
-{% empty %}
-<p>아직 댓글이 없습니다.</p>
 {% endfor %}
+</ul>
+
+{% include 'articles/_folow.html' %}
 
 {% endblock container %}
 

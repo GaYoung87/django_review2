@@ -137,3 +137,7 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'assets'), os.path.join(BASE_DIR, 'st
 # MEDIA_ROOT = os.path.join(BASE_DIR, 'uploaded_files')
 # # django.com/media/사용자가 업로드한 파일 경로
 # MEDIA_URL = '/media/'
+
+# User모델 커스터마이징함.
+# AUTH_USER_MODEL = default 값을 기본으로 가지고있음
+AUTH_USER_MODEL = 'accounts.User'  # '앱이름.모델이름'

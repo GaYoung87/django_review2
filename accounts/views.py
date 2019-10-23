@@ -7,6 +7,7 @@ from django.contrib.auth import login as auth_login, logout as auth_logout, upda
 from django.views.decorators.http import require_POST
 from .forms import CustomUserChangeForm
 from django.contrib.auth.decorators import login_required
+from .forms import CustomUserChangeForm, CustomUserCreationForm
 
 
 # 회원가입 form이 제공되어야함
@@ -18,13 +19,14 @@ def signup(request):
         return redirect('articles:index')
     # request.user.username == base.html에서 user.username
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)  # 사용자가 form안에서 id랑 비밀번호 입력한 것
+        form = CustomUserCreationForm(request.POST)  # 기본모델만 쓸 수 있음 -> 우리가 만든 것 넣어줌
+                                               # 사용자가 form안에서 id랑 비밀번호 입력한 것
         if form.is_valid():  # 입력값 확인
             user = form.save()
             auth_login(request, user)
             return redirect('articles:index')
     else:  # == 'GET'
-        form = UserCreationForm
+        form = CustomUserCreationForm
     context = {'form': form}
     # 회원가입 페이지 주세요
     return render(request, 'accounts/form.html', context)

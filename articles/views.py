@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
     # get_object_or_404: 꺼내는데, 거기에 해당하는데이터 없으면 404status코드 제공까지 알아서해줌
 from .forms import ArticleForm, CommentForm
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import get_user_model
 from django.http import HttpResponse  # 응답
 from .models import Article, Comment
 # from IPython import embed  # 너무 개발용.. -> 시간을 멈춘다
@@ -223,8 +224,22 @@ def like(request, article_pk):
     article = get_object_or_404(Article, pk=article_pk)  # 필요한 정보 준비 완료
 
     if article.liked_users.filter(pk=user.pk).exists():  # 좋아요 목록에 있었으면 제거
+    # if user in article.liked_users.all(): 윗 줄은 이 말과 동일! (효율은 윗줄이 좋음)
         # user입장에서 user가 좋아요 누른 article중에서 넘겨받은 article 추가하겠다.
         user.liked_articles.remove(article)
     else:  # 좋아요 목록에 없었으면 추가
         user.liked_articles.add(article)
+    return redirect('articles:detail', article_pk)
+
+
+# 사용자가 로그인 했을 때만 가능!
+def follow(request, article_pk, user_pk):
+    # 로그인 한 유저가 게시글 유저를 follow or unfollow 한다.
+    user = request.user  # 로그인 유저
+    person = get_object_or_404(get_user_model(), pk=user_pk)  # 게시글 주인
+
+    if user in person.followers.all():  # 이미 팔로워임
+        person.followers.remove(user)  # 언팔하겠음
+    else:
+        person.followers.add(user)  # 팔로우하겠음
     return redirect('articles:detail', article_pk)
