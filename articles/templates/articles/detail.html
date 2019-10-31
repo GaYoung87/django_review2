@@ -9,14 +9,27 @@
 <p>작성자: {{ article.user }}</p>
 <hr>
 {% comment %} 하트를 누르면 좋아요가 눌림 -> 하트가 버튼취급 {% endcomment %}
-<a href="{% url 'articles:like' article.pk %}">
+{% comment %} <a href="{% url 'articles:like' article.pk %}">
   {% if user in article.liked_users.all %}
     <i class="fas fa-heart fa-lg" style="color: red"></i>
   {% else %}
   <i class="far fa-heart fa-lg" style="color: red"></i>
   {% endif %}
-</a>
-<span>{{ article.liked_users.all | length }}명이 이 글을 좋아합니다. </span>
+</a> {% endcomment %}
+
+
+{% comment %} 좋아요부분! 밑에 script작성!!! {% endcomment %}
+{% comment %} javascript로 작성 {% endcomment %}
+<i 
+  class="{% if user in article.liked_users.all %}fas{% else %}far{% endif %} fa-heart fa-lg" 
+  id="like-btn" 
+  data-id="{{ article.pk }}"
+  style="color: red"
+>
+</i>
+
+{% comment %} <span>이 감싸고 있는것은 숫자, <p>는 전체를 감쌈 {% endcomment %}
+<p><span id="like-count">{{ article.liked_users.all | length }}</span>명이 이 글을 좋아합니다.</p>
 
 <p>{{ article.content }}</p>
 {% comment %} a: get요청(주소창에 쓰는 것)
@@ -64,8 +77,35 @@ post: 조건달고 보내는 것(ex. 암호 -> csrf_token사용, 그래서 주�
 {% endfor %}
 </ul>
 
-{% include 'articles/_folow.html' %}
+{% include 'articles/_follow.html' %}
 
+{% comment %} Java Script {% endcomment %}
+<script>
+  const likeBtn = document.querySelector('#like-btn')
+  likeBtn.addEventListener('click', function(event) {
+    console.log(event)
+    // Button의 dataId 속성을 아래 코드로 가지고 온다
+    const articleId = event.target.dataset.id
+    // 이렇게는 요청까지는 보내진다. 하지만 새로고침을 해야 바뀐 브라우저를 볼 수 있음
+    axios.get(`/articles/${articleId}/like/`)
+      .then(function(response) {
+        // console.log(response)
+        // 사용자의 좋아요 상태에 따라 버튼 클래스 변경
+        if(response.data.liked) { // 응답받았을 때, 사용자가 좋아요를 눌렀다면,
+          // console.log(likeBtn.classList)
+          likeBtn.classList.remove('far')  // event.target-> 위의 <i>(like버튼)
+          likeBtn.classList.add('fas') 
+        } else {
+          likeBtn.classList.remove('fas')  // event.target-> 위의 <i>(like버튼)
+          likeBtn.classList.add('far')
+        }
+        
+        // Article을 좋아하는 사람들 수의 데이터를 응답받아 적용시킨다.
+        const likeCount = document.querySelector('#like-count')
+        likeCount.innerText = response.data.count
+      })
+  })
+</script>
 {% endblock container %}
 
 

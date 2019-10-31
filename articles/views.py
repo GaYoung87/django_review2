@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .forms import ArticleForm, CommentForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
-from django.http import HttpResponse  # 응답
+from django.http import HttpResponse, JsonResponse  # 응답
 from .models import Article, Comment
 # from IPython import embed  # 너무 개발용.. -> 시간을 멈춘다
 from django.views.decorators.http import require_POST, require_GET
@@ -227,9 +227,12 @@ def like(request, article_pk):
     # if user in article.liked_users.all(): 윗 줄은 이 말과 동일! (효율은 윗줄이 좋음)
         # user입장에서 user가 좋아요 누른 article중에서 넘겨받은 article 추가하겠다.
         user.liked_articles.remove(article)
+        liked = False
     else:  # 좋아요 목록에 없었으면 추가
         user.liked_articles.add(article)
-    return redirect('articles:detail', article_pk)
+        liked = True
+    context = {'liked': liked, 'count': article.liked_users.count()}
+    return JsonResponse(context)
 
 
 # 사용자가 로그인 했을 때만 가능!
